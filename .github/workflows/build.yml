@@ -1,0 +1,46 @@
+name: firebase_admin_next
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  firebase_admin_next:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: NPM Install
+        run: rm -rf ~/.npm && npm install
+
+      - name: NPM Run Lint
+        run: npm run lint
+
+      - name: NPM Run Build
+        run: npm run build
+
+      - name: Generate APP_VERSION
+        run: |
+          VERSION=$(npm pkg get version | tr -d '"')
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Get Node Modules
+        run: tar cvf ~/node_modules.tar.xz node_modules --use-compress-program="xz -9"
+
+      - name: Upload Artifact
+        run: |
+          _APP_VERSION="v$APP_VERSION"
+          gh release delete "${_APP_VERSION}" --yes || true
+          gh release create "${_APP_VERSION}" --title "$_APP_VERSION" --latest=true --generate-notes || true
+          gh release upload "${_APP_VERSION}" \
+          ~/node_modules.tar.xz \
+          --clobber

@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: APP-X-X-X API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  # parameters:
+  #   X-API-Key:
+  #     name: X-API-Key
+  #     in: header
+  #     description: API key for authentication
+  #     required: true
+  #     schema:
+  #       type: string
+  #       example: RAHASIA
+  # schemas:
+  #   user_id:
+  #     type: string
+  #     example: "yifvJ4xO7Jq74hQKkRXG"
+  #   user:
+  #     type: object
+  #     properties:
+  #       username:
+  #         type: string
+  #         example: "xxx"
+  #       email:
+  #         type: string
+  #         format: email
+  #         example: "xxx@example.com"
+  #     required:
+  #       - username
+  #       - email
+paths:
+  /users:
+    post:
+      summary: Register a new user
+      description: Creates a user and returns their ID on success.
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: "text"
+                  example: "x-xxx"
+              required:
+                - username
+      responses:
+        200:
+          description: User was successfully registered
+      #     content:
+      #       application/json:
+      #         schema:
+      #           type: object
+      #           properties:
+      #             message:
+      #               type: string
+      #               example: "User created"
+      #             data:
+      #               type: object
+      #               properties:
+      #                 id:
+      #                   $ref: "#/components/schemas/user_id"
+
+    patch:
+      summary: Register a new user
+      description: Creates a user and returns their ID on success.
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  format: "text"
+                  example: "x-xxx"
+              required:
+                - username
+      responses:
+        200:
+          description: User was successfully registered
+      #     content:
+      #       application/json:
+      #         schema:
+      #           type: object
+      #           properties:
+      #             message:
+      #               type: string
+      #               example: "User created"
+      #             data:
+      #               type: object
+      #               properties:
+      #                 id:
+      #                   $ref: "#/components/schemas/user_id"
